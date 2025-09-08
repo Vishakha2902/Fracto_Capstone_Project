@@ -1,0 +1,47 @@
+
+
+<h4>Manage Doctors (Admin)</h4>
+
+<div *ngIf="loading" class="text-center my-3">
+  <div class="spinner-border"></div>
+</div>
+
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+<!-- Add Doctor Form -->
+<div class="card p-3 mb-3">
+  <h5>Add Doctor</h5>
+  <div class="row">
+    <div class="col-md-3 mb-2">
+      <input class="form-control" placeholder="Name" [(ngModel)]="model.name" />
+    </div>
+    <div class="col-md-2 mb-2">
+      <input class="form-control" placeholder="City" [(ngModel)]="model.city" />
+    </div>
+    <div class="col-md-2 mb-2">
+      <input class="form-control" type="number" placeholder="Rating" [(ngModel)]="model.rating" />
+    </div>
+    <div class="col-md-3 mb-2">
+      <input class="form-control" placeholder="SpecializationId" [(ngModel)]="model.specializationId" />
+    </div>
+    <div class="col-md-2 mb-2">
+      <button class="btn btn-success w-100" (click)="add()">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Doctors List -->
+<div class="list-group">
+  <div class="list-group-item" *ngFor="let d of doctors">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h6>{{ d.name }} <small class="text-muted">({{ d.specialization?.name }})</small></h6>
+        <p class="mb-0">{{ d.city }}</p>
+      </div>
+      <div>
+        <button class="btn btn-sm btn-warning me-2" (click)="edit(d)">Edit</button>
+        <button class="btn btn-sm btn-danger" (click)="deleteDoctor(d.id)">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

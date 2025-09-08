@@ -1,0 +1,112 @@
+<div class="container py-3">
+
+  <!-- Pending -->
+  <div class="d-flex align-items-center justify-content-between mb-2">
+    <h4 class="m-0">Pending Appointments</h4>
+    <button class="btn btn-sm btn-outline-secondary" (click)="loadPending()" [disabled]="loadingPending">
+      Refresh
+    </button>
+  </div>
+
+  <div *ngIf="errorPending" class="alert alert-danger">{{ errorPending }}</div>
+  <div *ngIf="loadingPending" class="alert alert-info">Loading pending...</div>
+
+  <div class="table-responsive" *ngIf="!loadingPending && !errorPending">
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr>
+          <th>ID</th><th>User</th><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of pending; trackBy: trackById">
+          <td>{{ a.id }}</td>
+          <td>{{ a.userId }}</td>
+          <td>{{ a.doctorId }}</td>
+          <td>{{ a.appointmentDate | date:'mediumDate' }}</td>
+          <td>{{ a.timeSlot }}</td>
+          <td>
+            <span class="badge"
+              [ngClass]="{
+                'bg-warning text-dark': a.status === 'Pending',
+                'bg-success': a.status === 'Approved',
+                'bg-secondary': a.status === 'Cancelled',
+                'bg-info text-dark': a.status === 'Booked'
+              }">
+              {{ a.status }}
+            </span>
+          </td>
+          <td class="d-flex flex-wrap gap-2">
+            <button class="btn btn-success btn-sm"
+                    (click)="approve(a.id)"
+                    [disabled]="actionBusy[a.id] || a.status === 'Approved'">
+              Approve
+            </button>
+            <button class="btn btn-outline-danger btn-sm"
+                    (click)="cancel(a.id)"
+                    [disabled]="actionBusy[a.id] || a.status === 'Cancelled'">
+              Cancel
+            </button>
+            <small class="text-danger w-100" *ngIf="actionError[a.id]">{{ actionError[a.id] }}</small>
+          </td>
+        </tr>
+        <tr *ngIf="pending.length === 0">
+          <td colspan="7" class="text-muted">No pending items.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- All -->
+  <div class="d-flex align-items-center justify-content-between mt-4 mb-2">
+    <h4 class="m-0">All Appointments</h4>
+    <button class="btn btn-sm btn-outline-secondary" (click)="loadAll()" [disabled]="loadingAll">
+      Refresh
+    </button>
+  </div>
+
+  <div *ngIf="errorAll" class="alert alert-danger">{{ errorAll }}</div>
+  <div *ngIf="loadingAll" class="alert alert-info">Loading all...</div>
+
+  <div class="table-responsive" *ngIf="!loadingAll && !errorAll">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>ID</th><th>User</th><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of all; trackBy: trackById">
+          <td>{{ a.id }}</td>
+          <td>{{ a.userId }}</td>
+          <td>{{ a.doctorId }}</td>
+          <td>{{ a.appointmentDate | date:'mediumDate' }}</td>
+          <td>{{ a.timeSlot }}</td>
+          <td>
+            <span class="badge"
+              [ngClass]="{
+                'bg-warning text-dark': a.status === 'Pending',
+                'bg-success': a.status === 'Approved',
+                'bg-secondary': a.status === 'Cancelled',
+                'bg-info text-dark': a.status === 'Booked'
+              }">
+              {{ a.status }}
+            </span>
+          </td>
+          <td class="text-end">
+            <button class="btn btn-outline-danger btn-sm"
+                    (click)="cancel(a.id)"
+                    [disabled]="actionBusy[a.id] || a.status === 'Cancelled'">
+              Cancel
+            </button>
+            <small class="text-danger d-block" *ngIf="actionError[a.id]">{{ actionError[a.id] }}</small>
+          </td>
+        </tr>
+        <tr *ngIf="all.length === 0">
+          <td colspan="7" class="text-muted">No data.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

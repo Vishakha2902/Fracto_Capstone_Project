@@ -1,0 +1,24 @@
+<h4>My Appointments</h4>
+
+<div *ngIf="loading" class="text-center my-4">
+  <div class="spinner-border"></div>
+</div>
+
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+<div *ngIf="!loading && !appts.length" class="alert alert-info">No appointments found.</div>
+
+<div class="list-group" *ngIf="appts.length">
+  <div class="list-group-item" *ngFor="let a of appts">
+    <div class="d-flex justify-content-between">
+      <div>
+        <h6>{{ a.doctor?.name }}</h6>
+        <p class="mb-0">{{ a.doctor?.specialization?.name }} • {{ a.doctor?.city }}</p>
+        <small>{{ a.appointmentDate | date:'mediumDate' }} • {{ a.timeSlot }}</small>
+      </div>
+      <div>
+        <button class="btn btn-danger" (click)="cancel(a.id)">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
